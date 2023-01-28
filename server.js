@@ -38,19 +38,19 @@ function firstChoice() {
         switch(answer.task) {
             case "View all departments":
                 console.log(`switch case chose ${answer.task}`);
-                //viewDepartments();
+                viewDepartments();
                 break;
             case "View all roles":
-                //viewRoles();
+                viewRoles();
                 break;
             case "View all employees":
-                //viewEmployees();
+                viewEmployees();
                 break;
             case "Add a department":
-                //addDepartment();
+                addDepartment();
                 break;
             case "Add a role":
-                //addRole();
+                addRole();
                 break;
             case "Add an employee":
                 //addEmployee();
@@ -59,7 +59,7 @@ function firstChoice() {
                 //updateEmployee();
                 break;
             default:
-                //finish();
+                finish();
         }
        });
 }
@@ -67,5 +67,73 @@ function firstChoice() {
 //Functions
 
 function viewDepartments() {
-    
+    let query = "SELECT * FROM department";
+    connection.query(query, function(err, res) {
+        console.table(res);
+        firstChoice();
+    })
+};
+
+function viewRoles() {
+    let query = "SELECT * FROM role";
+    connection.query(query, function(err, res) {
+        console.table(res);
+        firstChoice();
+    })
+};
+
+function viewEmployees() {
+    let query = "SELECT * FROM employee";
+    connection.query(query, function(err, res) {
+        console.table(res);
+        firstChoice();
+    })
+};
+
+function addDepartment() {
+    inquirer.prompt({
+        type: 'input',
+        message: "What is the name of the new department?",
+        name: "newDepartment"
+
+    })
+    .then(function(answer){
+        connection.query("INSERT INTO department (name) VALUES (?)", [answer.newDepartment], function(err, res) {
+            if (err) throw err;
+        });
+        viewDepartments();
+        firstChoice();
+    })
+};
+
+function addRole() {
+    inquirer.prompt(
+    {
+        type: 'input',
+        message: "What is the name of the new role?",
+        name: "newRole"
+
+    },
+    {
+        type: 'input',
+        message: 'What is the salary?',
+        name: 'newSalary'
+    },
+    {
+        type: 'input',
+        message: "What is the department id number?",
+        name: 'newDeparmentId'
+    })
+    .then(function(answer){
+        connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.newRole, answer.newSalary, answer.newDepartmentId], function(err, res) {
+            if (err) throw err;
+        });
+        viewRoles();
+        firstChoice();
+    })
+}
+
+function finish() {
+    connection.end();
+    process.exit();
 }
