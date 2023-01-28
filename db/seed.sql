@@ -10,9 +10,9 @@ USE employee_db;
 
 INSERT INTO role(title, salary, department_id)
 VALUES ("Software Engineer", 80000, 1),
-        ("Accountant", 800000, 2),
-        ("Lawyer", 800000, 3),
-        ("Sales Representative", 800000, 4);
+        ("Accountant", 80000, 2),
+        ("Lawyer", 80000, 3),
+        ("Sales Representative", 80000, 4);
 
 USE employee_db;
 
