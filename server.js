@@ -101,14 +101,18 @@ function addDepartment() {
         connection.query("INSERT INTO department (name) VALUES (?)", [answer.newDepartment], function(err, res) {
             if (err) throw err;
         });
-        viewDepartments();
+        let query = "SELECT * FROM department";
+        connection.query(query, function(err, res) {
+            console.table(res);
+        })
+        
         firstChoice();
     })
 };
 
 function addRole() {
     inquirer.prompt(
-    {
+    [{
         type: 'input',
         message: "What is the name of the new role?",
         name: "newRole"
@@ -120,17 +124,20 @@ function addRole() {
         name: 'newSalary'
     },
     {
-        type: 'input',
+        type: 'number',
         message: "What is the department id number?",
         name: 'newDeparmentId'
-    })
+    }])
     .then(function(answer){
-        connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.newRole, answer.newSalary, answer.newDepartmentId], function(err, res) {
+        connection.query("INSERT INTO role (title, salary, department_id) VALUES (?, ?, ?)", [answer.newRole, answer.newSalary, answer.newDeparmentId], function(err, res) {
             if (err) throw err;
         });
-        viewRoles();
+    let query = "SELECT * FROM role";
+    connection.query(query, function(err, res) {
+        console.table(res);
+    });
         firstChoice();
-    })
+    });
 }
 
 function finish() {
