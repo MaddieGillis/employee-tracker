@@ -53,10 +53,10 @@ function firstChoice() {
                 addRole();
                 break;
             case "Add an employee":
-                //addEmployee();
+                addEmployee();
                 break;
             case "Update employee role":
-                //updateEmployee();
+                updateEmployee();
                 break;
             default:
                 finish();
@@ -138,6 +138,68 @@ function addRole() {
     });
         firstChoice();
     });
+};
+
+function addEmployee() {
+    inquirer.prompt(
+        [{
+            type: 'input',
+            message: "What is the first name of the staff?",
+            name: "newFirstName"
+    
+        },
+        {
+            type: 'input',
+            message: 'What is last name of the staff?',
+            name: 'newLastName'
+        },
+        {
+            type: 'number',
+            message: "What is the id number for their role?",
+            name: 'newRoleId'
+        },
+        {
+            type: 'number',
+            message: "What is the manager\'s id?",
+            name: "newManagerId"
+        }]).then(function(answer){
+            connection.query("INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)", [answer.newFirstName, answer.newLastName, answer.newRoleId, answer.newManagerId], function(err, res) {
+                if (err) throw err;
+            });
+        let query = "SELECT * FROM employee";
+        connection.query(query, function(err, res) {
+            console.table(res);
+        });
+            firstChoice();
+        });
+};
+
+function updateEmployee() {
+    inquirer
+    .prompt([
+      {
+        type: "input",
+        message: "What is the first name of the employee you would like to update?",
+        name: "updateEmployee"
+      },
+
+      {
+        type: "number",
+        message: "What is the employee\'s new role id?",
+        name: "updateRole"
+      }
+    ])
+    .then(function(answer) {
+
+        connection.query('UPDATE employee SET role_id=? WHERE first_name= ?',[answer.updateRole, answer.updateEmployee],function(err, res) {
+          if (err) throw err;
+        });
+        let query = "SELECT * FROM employee";
+        connection.query(query, function(err, res) {
+            console.table(res);
+        });
+        firstChoice();
+      });
 }
 
 function finish() {
